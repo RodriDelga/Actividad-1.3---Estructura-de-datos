@@ -119,7 +119,7 @@ void mergeSort(std::vector<T> &array, int first, int last) {
 // Retorna: el índice del primer elemento con fecha >= target.
 // Complejidad: O(log n)
 template<typename T>
-int lowerBound(const std::vector<T> &array, T &target) {
+int lowerBound(const std::vector<T> &array, int &startMonth, int &startDay) {
     // min, max, avg are indices
     int low = 0;
     int high = static_cast<int>(array.size());
@@ -127,12 +127,9 @@ int lowerBound(const std::vector<T> &array, T &target) {
     while(low < high) {
         int middle = low + (high - low)/2;
 
-        //std::cout << "Middle: " << middle << std::endl;
-
         std::vector<T> partesArray = OOPUtils::split(array[middle], " ");
-        std::vector<T> partesTarget = OOPUtils::split(target, " ");
 
-        if (month(partesArray[0]) < month(partesTarget[0]) || (month(partesArray[0]) == month(partesTarget[0]) && std::stoi(partesArray[1]) < std::stoi(partesTarget[1]))) {
+        if (month(partesArray[0]) < startMonth || (month(partesArray[0]) == startMonth && std::stoi(partesArray[1]) < startDay)) {
             low = middle + 1;
         } else {
             high = middle;
@@ -148,7 +145,7 @@ int lowerBound(const std::vector<T> &array, T &target) {
 // Retorna: el índice del primer elemento con fecha > target.
 // Complejidad: O(log n)
 template<typename T>
-int upperBound(const std::vector<T> &array, T &target) {
+int upperBound(const std::vector<T> &array, int &endMonth, int &endDay) {
     // min, max, avg are indices
     int low = 0;
     int high = static_cast<int>(array.size());
@@ -156,12 +153,9 @@ int upperBound(const std::vector<T> &array, T &target) {
     while(low < high) {
         int middle = low + (high - low)/2;
 
-        //std::cout << "Middle: " << middle << std::endl;
-
         std::vector<T> partesArray = OOPUtils::split(array[middle], " ");
-        std::vector<T> partesTarget = OOPUtils::split(target, " ");
 
-        if (month(partesArray[0]) < month(partesTarget[0]) || (month(partesArray[0]) == month(partesTarget[0]) && std::stoi(partesArray[1]) < std::stoi(partesTarget[1]) + 1)) {
+        if (month(partesArray[0]) < endMonth || (month(partesArray[0]) == endMonth && std::stoi(partesArray[1]) < endDay + 1)) {
             low = middle + 1;
         } else {
             high = middle;
@@ -197,8 +191,15 @@ int main() {
 
     std::string opcString;
     int opc;
-    std::string startDate;
+    std::string startMonthString;
+    std::string startDayString;
+    std::string endMonthString;
+    std::string endDayString;
     std::string endDate;
+    int startMonth;
+    int startDay;
+    int endMonth;
+    int endDay;
     int start;
     int end;
 
@@ -212,13 +213,32 @@ int main() {
         switch (opc)
         {
             case 1:
-                std::cout << "Ingresa la fecha de inicio en el formato: Month Day" << std::endl;
-                std::getline(std::cin, startDate);
-                std::cout << "Ingresa la fecha final en el formato: Month Day" << std::endl;
-                std::getline(std::cin, endDate);
+                std::cout << "Escoge un mes para la fecha de inicio: " << std::endl;
+                std::cout << "6- Jun" << std::endl;
+                std::cout << "7- Jul" << std::endl;
+                std::cout << "8- Aug" << std::endl;
+                std::cout << "9- Sep" << std::endl;
+                std::cout << "10- Oct" << std::endl;
+                std::getline(std::cin, startMonthString);
+                startMonth = std::stoi(startMonthString);
+                std::cout << "Ingresa el dia de la fecha de inicio: " << std::endl;
+                std::getline(std::cin, startMonthString);
+                startDay = std::stoi(startMonthString);
+                
+                std::cout << "Escoge un mes para la fecha final: " << std::endl;
+                std::cout << "6- Jun" << std::endl;
+                std::cout << "7- Jul" << std::endl;
+                std::cout << "8- Aug" << std::endl;
+                std::cout << "9- Sep" << std::endl;
+                std::cout << "10- Oct" << std::endl;
+                std::getline(std::cin, endMonthString);
+                endMonth = std::stoi(endMonthString);
+                std::cout << "Ingresa el dia de la fecha final: " << std::endl;
+                std::getline(std::cin, endMonthString);
+                endDay = std::stoi(endMonthString);
 
-                start = lowerBound(bitacora, startDate);
-                end = upperBound(bitacora, endDate) - 1;
+                start = lowerBound(bitacora, startMonth, startDay);
+                end = upperBound(bitacora, endMonth, endDay) - 1;
 
                 for(int i = start; i <= end; i++){
                     std::cout << bitacora[i] << std::endl;
