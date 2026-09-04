@@ -11,11 +11,11 @@
  * permite consultar entradas dentro de un rango de fechas mediante
  * búsqueda binaria (lower bound / upper bound), y guarda el resultado
  * ordenado en un nuevo archivo.
- * Matrícula: [tu matrícula aquí]
- * Fecha: [fecha aquí]
+ * Matrícula: A01648448
+ * Fecha: 3 de septiembre de 2026
  */
 
-// Convierte el nombre abreviado de un mes (en inglés) a su número correspondiente.
+// Convierte el nombre abreviado de un mes a su número correspondiente.
 // m: cadena con el nombre del mes (por ejemplo "Jun", "Jul").
 // Retorna: el número del mes (6-10), o 0 si no coincide con ninguno reconocido.
 template<typename T>
