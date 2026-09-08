@@ -1,6 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <string>
 #include <fstream>
 
 #include "OOPUtils.h"
@@ -204,6 +201,7 @@ int main() {
     int end;
 
     do{
+        try {
         std::cout << "Selecciona una opción: " << std::endl;
         std::cout << "1- Ver información en un rango de fechas" << std::endl;
         std::cout << "2- Salir" << std::endl;
@@ -213,43 +211,48 @@ int main() {
         switch (opc)
         {
             case 1:
-                std::cout << "Escoge un mes para la fecha de inicio: " << std::endl;
-                std::cout << "6- Jun" << std::endl;
-                std::cout << "7- Jul" << std::endl;
-                std::cout << "8- Aug" << std::endl;
-                std::cout << "9- Sep" << std::endl;
-                std::cout << "10- Oct" << std::endl;
-                std::getline(std::cin, startMonthString);
-                startMonth = std::stoi(startMonthString);
-                std::cout << "Ingresa el dia de la fecha de inicio: " << std::endl;
-                std::getline(std::cin, startMonthString);
-                startDay = std::stoi(startMonthString);
+                    std::cout << "Escoge un mes para la fecha de inicio: " << std::endl;
+                    std::cout << "6- Jun" << std::endl;
+                    std::cout << "7- Jul" << std::endl;
+                    std::cout << "8- Aug" << std::endl;
+                    std::cout << "9- Sep" << std::endl;
+                    std::cout << "10- Oct" << std::endl;
+                    std::getline(std::cin, startMonthString);
+                    startMonth = std::stoi(startMonthString);
+                    std::cout << "Ingresa el dia de la fecha de inicio: " << std::endl;
+                    std::getline(std::cin, startMonthString);
+                    startDay = std::stoi(startMonthString);
+                    
+                    std::cout << "Escoge un mes para la fecha final: " << std::endl;
+                    std::cout << "6- Jun" << std::endl;
+                    std::cout << "7- Jul" << std::endl;
+                    std::cout << "8- Aug" << std::endl;
+                    std::cout << "9- Sep" << std::endl;
+                    std::cout << "10- Oct" << std::endl;
+                    std::getline(std::cin, endMonthString);
+                    endMonth = std::stoi(endMonthString);
+                    std::cout << "Ingresa el dia de la fecha final: " << std::endl;
+                    std::getline(std::cin, endMonthString);
+                    endDay = std::stoi(endMonthString);
+
+                    start = lowerBound(bitacora, startMonth, startDay);
+                    end = upperBound(bitacora, endMonth, endDay) - 1;
+
+                    for(int i = start; i <= end; i++){
+                        std::cout << bitacora[i] << std::endl;
+                    }
                 
-                std::cout << "Escoge un mes para la fecha final: " << std::endl;
-                std::cout << "6- Jun" << std::endl;
-                std::cout << "7- Jul" << std::endl;
-                std::cout << "8- Aug" << std::endl;
-                std::cout << "9- Sep" << std::endl;
-                std::cout << "10- Oct" << std::endl;
-                std::getline(std::cin, endMonthString);
-                endMonth = std::stoi(endMonthString);
-                std::cout << "Ingresa el dia de la fecha final: " << std::endl;
-                std::getline(std::cin, endMonthString);
-                endDay = std::stoi(endMonthString);
-
-                start = lowerBound(bitacora, startMonth, startDay);
-                end = upperBound(bitacora, endMonth, endDay) - 1;
-
-                for(int i = start; i <= end; i++){
-                    std::cout << bitacora[i] << std::endl;
-                }
                 break;
             case 2:
-                    
+                std::cout << "Gracias por usar este programa" << std::endl;
                 break;
             default:
                 std::cout << "Ingresa un numero valido " << std::endl;
                 break;
+        }
+        } catch (const std::invalid_argument &error) {
+                std::cout << "Ingresa un valor valido... FF" << std::endl;
+                std::cout << std::endl;
         }
     }while(opc != 2);    
 
