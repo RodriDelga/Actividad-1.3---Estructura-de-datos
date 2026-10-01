@@ -24,7 +24,7 @@ private:
   int segundo;
   std::string ip;
   std::string mensaje;
-  const MonthRegistry& registry_;
+  const MonthRegistry& monthRegistry_;
   
 
 public:

@@ -15,7 +15,7 @@
 // hora, minuto, segundo: hora del registro, representada como texto.
 // ip: dirección IP asociada al registro. mensaje: contenido del mensaje registrado.
 Registro::Registro(int mes, int dia, int hora, int  minuto, int segundo, std::string ip, std::string mensaje, const MonthRegistry& reg) 
-: mes(mes), dia(dia), hora(hora), minuto(minuto), segundo(segundo), ip(ip), mensaje(mensaje), registry_(reg){}
+: mes(mes), dia(dia), hora(hora), minuto(minuto), segundo(segundo), ip(ip), mensaje(mensaje), monthRegistry_(reg){}
 
 // Compara este registro con otro para determinar orden cronológico.
 // registro: el registro con el que se compara.
@@ -33,7 +33,7 @@ bool Registro::operator<(const Registro &registro) const {
 // Retorna: una cadena con el formato "Mes dia hora:minuto:segundo ip mensaje".
 std::string Registro::getRegistro() {
     
-    std::string mesString = registry_.get(mes).shortName;
+    std::string mesString = monthRegistry_.get(mes).shortName;
 
     return mesString + " " + std::to_string(dia) + " " + std::to_string(hora) + ":" + std::to_string(minuto)
      + ":" + std::to_string(segundo) + " " + ip + " " + mensaje;
