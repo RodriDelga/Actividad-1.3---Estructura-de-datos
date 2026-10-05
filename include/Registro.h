@@ -1,8 +1,9 @@
 #pragma once
+#include <array>
 #include <iostream>
 #include <months.hpp>
 #include <string>
-
+#include <vector>
 
 /*
  * Clase Registro: representa una entrada de la bitácora con fecha, hora,
@@ -24,12 +25,13 @@ private:
   int segundo;
   std::string ip;
   std::string mensaje;
-  const MonthRegistry& monthRegistry_;
-  
+  const MonthRegistry &monthRegistry_;
+  std::array<int, 4> ipKey = {};
 
 public:
-  explicit Registro(int mes, int dia, int hora, int minuto,
-           int segundo, std::string ip, std::string mensaje, const MonthRegistry& reg);
+  explicit Registro(int mes, int dia, int hora, int minuto, int segundo,
+                    std::string ip, std::string mensaje,
+                    const MonthRegistry &reg, std::vector<std::string>& IpKeys);
   bool operator<(const Registro &registro) const;
   std::string getRegistro();
   int getMes() const;
@@ -39,4 +41,6 @@ public:
   int getSegundo() const;
   std::string getIp();
   std::string getMensaje();
+  bool compareIpKeyLT(const Registro &otherRegistro) const;
+  int getIpKey(int i) const;
 };
