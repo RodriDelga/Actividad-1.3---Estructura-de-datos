@@ -1,12 +1,15 @@
 #pragma once
 #include <vector>
+#include <Date.hpp>
 // Busca el índice del primer elemento cuya fecha no es anterior a target.
 // array: el vector ordenado donde se busca (no se modifica).
 // target: la fecha de referencia a comparar.
 // Retorna: el índice del primer elemento con fecha >= target.
 // Complejidad: O(log n)
 template<typename T>
-int lowerBoundDate(const std::vector<T> &array, int &startMonth, int &startDay) {
+int lowerBoundDate(const std::vector<T> &array, Date& dateStart) {
+    int startMonth = dateStart.month;
+    int startDay = dateStart.day;
     int low = 0;
     int high = static_cast<int>(array.size());
 
@@ -29,7 +32,9 @@ int lowerBoundDate(const std::vector<T> &array, int &startMonth, int &startDay) 
 // Retorna: el índice del primer elemento con fecha > target.
 // Complejidad: O(log n)
 template<typename T>
-int upperBoundDate(const std::vector<T> &array, int &endMonth, int &endDay) {
+int upperBoundDate(const std::vector<T> &array, Date& dateEnd ) {
+    int endMonth = dateEnd.month;
+    int endDay = dateEnd.day;
     int low = 0;
     int high = static_cast<int>(array.size());
 

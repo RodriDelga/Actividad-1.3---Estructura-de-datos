@@ -24,7 +24,7 @@ struct Month {
 
 class MonthRegistry {
 public:
-    // PUBLIC CONSTRUCTOR: Anyone can create an instance now
+    
     MonthRegistry() {
         months_ = {
             {1,  "January", "Jan",  31}, {2,  "February", "Feb", 28}, {3,  "March",  "Mar",   31},
@@ -65,6 +65,7 @@ public:
     const int  getMonthAbr(std::string name) {
         return get(name).index;
     }
+    
 private:
     std::vector<Month> months_;
     std::unordered_map<std::string, const Month*> name_map_;

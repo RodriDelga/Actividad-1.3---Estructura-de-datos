@@ -1,4 +1,4 @@
-#include "OOPUtils.h"
+#include "OOPUtils.hpp"
 
 /*
  * Implementación de OOPUtils: funciones utilitarias de propósito general,

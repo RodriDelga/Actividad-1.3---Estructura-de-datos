@@ -1,1 +1,1 @@
-# Actividad-1.3---Estructura-de-datos
+# Act 2.3a (Equipo) - Actividad Integral estructura de datos lineales (Evidencia Competencia)

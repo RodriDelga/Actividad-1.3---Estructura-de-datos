@@ -1,14 +1,10 @@
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <months.hpp>
-#include "OOPUtils.h"
-#include "Registro.h"
+#include "ConsoleUI.hpp"
+#include "Registro.hpp"
 #include "mergeSortByIpKey.hpp"
+#include <Date.hpp>
+#include <FileHandler.hpp>
 #include <binarySearchByDate.hpp>
 #include <mergeSortByDate.hpp>
-#include <string>
-#include <vector>
 
 /*
  * Programa: Ordenamiento y consulta por rango de fechas de una bitácora.
@@ -23,152 +19,77 @@
  * Fecha: 3 de septiembre de 2026
  */
 
+void printMonths(const MonthRegistry &);
 
-void printMonths(const MonthRegistry&);
-
+int getValidInteger(const std::string &prompt, int minVal, int maxVal);
 
 // Punto de entrada del programa: lee la bitácora, la ordena cronológicamente,
-// permite consultar registros por rango de fechas y guarda el resultado ordenado.
-// Retorna: 0 si el programa terminó correctamente.
+// permite consultar registros por rango de fechas y guarda el resultado
+// ordenado. Retorna: 0 si el programa terminó correctamente.
 int main() {
-    MonthRegistry months;
-    std::vector<Registro*> bitacora;
+  MonthRegistry months;
+  std::vector<Registro *> bitacora;
+  FileHandler fileHandler;
 
-    std::ifstream file("bitacora.txt");
+  fileHandler.readLogs(bitacora, "bitacora.txt");
 
-    std::string lineaActual;
+  mergeSortByDate(bitacora, 0, static_cast<int>(bitacora.size()) - 1);
+  mergeSortByIpKey(bitacora, 0, static_cast<int>(bitacora.size()) - 1);
+  std::string opcString = "";
+  int opc = 0;
 
-    // ahora si leemos archivo
-    if(file.is_open()){
+  std::string startMonthString = "";
+  std::string startDayString = "";
+  std::string endMonthString = "";
+  std::string endDayString = "";
 
-        // leamos el archivo linea por linea
-        while (std::getline(file, lineaActual))
-        {
-            std::vector<std::string> partes = OOPUtils::split(lineaActual, " ");
-            std::vector<std::string> horario = OOPUtils::split(partes[2], ":");
-            std::string mensaje;
+  Date dateStart;
+  Date dateEnd;
+  int start,end;
 
-            for(int i = 4; i < partes.size(); i++){
-                mensaje += partes[i] + ((i==partes.size()-1) ? "":" ");
-            }
-            std::vector<std::string> ipKeys = OOPUtils::split(partes[3], ".");
-            std::vector<std::string> noPort = OOPUtils::split(ipKeys[3], ":");
-            ipKeys.pop_back();
-            ipKeys.push_back(noPort[0]);
+  do {
+    try {
+      std::cout << "Selecciona una opción: " << std::endl;
+      std::cout << "1 - Ver información en un rango de fechas: " << std::endl;
+      std::cout << "2 - Ver información en un rango de IP Keys: " << std::endl;
+      std::cout << "3 - Salir" << std::endl;
+      std::getline(std::cin, opcString);
+      opc = std::stoi(opcString);
 
-            Registro* r = new Registro(months.getMonthAbr(partes[0]), std::stoi(partes[1]), std::stoi(horario[0]), std::stoi(horario[1]), 
-                                       std::stoi(horario[2]), partes[3], mensaje, months, ipKeys);
-            
-            
-            
-            bitacora.push_back(r);
+      switch (opc) {
+      case 1:
+        mergeSortByDate(bitacora, 0, bitacora.size() - 1);
+        dateStart = ConsoleUI::promptForDate("inicio", months);
 
-        } 
+        dateEnd = ConsoleUI::promptForDate("final", months);
 
-        file.close();
-    } else {
-            std::cout << "ERROR FATAL AL LEER EL ARCHIVO! PANICO!" << std::endl;
-    }
+        start = lowerBoundDate(bitacora, dateStart);
 
-    mergeSortByDate(bitacora, 0, static_cast<int>(bitacora.size()) - 1);
-    mergeSortByIpKey(bitacora, 0, static_cast<int>(bitacora.size()) - 1);
-    std::string opcString = "";
-    int opc = 0;
-    std::string startMonthString = "";
-    std::string startDayString = "";
-    std::string endMonthString = "";
-    std::string endDayString = "";
-    int startMonth = 0;
-    int startDay = 0;
-    int endMonth = 0;
-    int endDay = 0;
-    int start = 0;
-    int end = 0;
-
-    do{
-        try {
-        std::cout << "Selecciona una opción: " << std::endl;
-        std::cout << "1- Ver información en un rango de fechas" << std::endl;
-        std::cout << "2- Salir" << std::endl;
-        std::getline(std::cin, opcString);
-        opc = std::stoi(opcString);
-
-        switch (opc)
-        {
-            case 1:
-                    std::cout << "Escoge un mes para la fecha de inicio: " << std::endl;
-
-                    printMonths(months);
-
-                    std::getline(std::cin, startMonthString);
-
-                    startMonth = std::stoi(startMonthString);
-
-                    std::cout << "Ingresa el dia de la fecha de inicio: " << std::endl;
-
-                    std::getline(std::cin, startDayString);
-
-                    startDay = std::stoi(startDayString);
-                    
-                    std::cout << "Escoge un mes para la fecha final: " << std::endl;
-
-                    printMonths(months);
-
-                    std::getline(std::cin, endMonthString);
-
-                    endMonth = std::stoi(endMonthString);
-                    
-                    std::cout << "Ingresa el dia de la fecha final: " << std::endl;
-
-                    std::getline(std::cin, endDayString);
-
-                    endDay = std::stoi(endDayString);
-
-                    start = lowerBoundDate(bitacora, startMonth, startDay);
-
-                    end = upperBoundDate(bitacora, endMonth, endDay) - 1;
-                    if (start > end) std::cout << "No hay registros para ese periodo." << std::endl;
-                    for(int i = start; i <= end; i++){
-                        std::cout << bitacora[i]->getRegistro() << std::endl;
-                    }
-                
-                break;
-            case 2:
-                
-                break;
-            case 3:
-                std::cout << "Gracias por usar este programa" << std::endl;
-                break;
-            default:
-                std::cout << "Ingresa un numero valido " << std::endl;
-                break;
+        end = upperBoundDate(bitacora, dateEnd) - 1;
+        if (start > end)
+          std::cout << "No hay registros para ese periodo." << std::endl;
+        for (int i = start; i <= end; i++) {
+          std::cout << bitacora[i]->getRegistro() << std::endl;
         }
-        } catch (const std::invalid_argument &error) {
-                std::cout << "Ingresa un valor valido... FF" << std::endl;
-                std::cout << std::endl;
-        }
-    }while(opc != 2);    
 
-    std::ofstream archivo("bitacoraOrdenada.txt");
-
-    if (archivo.is_open()) {
-        for (const auto &linea : bitacora) {
-            archivo << linea->getRegistro() << std::endl;
-        }
-        archivo.close();
-    } else {
-        std::cout << "ERROR: no se pudo abrir el archivo para escritura." << std::endl;
-    }
-
-    for (Registro* reg : bitacora) {
-        delete reg;
-    }
-    bitacora.clear();
-}
-
-void printMonths(const MonthRegistry& reg) {
-    for (const auto& month : reg.all()) {
-        std::cout << std::setw(3) << std::right << month.index <<  " - " << month.name 
+        break;
+      case 2:
+        mergeSortByIpKey(bitacora, 0, bitacora.size() - 1);
+        std::cout << "Introduce una clave IP en el formato XXX.X.X.XX"
                   << std::endl;
+        break;
+      case 3:
+        std::cout << "Gracias por usar este programa" << std::endl;
+        break;
+      default:
+        std::cout << "Ingresa un numero valido " << std::endl;
+        break;
+      }
+    } catch (const std::invalid_argument &error) {
+      std::cout << "Ingresa un valor valido... FF" << std::endl;
+      std::cout << std::endl;
     }
+  } while (opc != 2);
+
+  fileHandler.storeLogs(bitacora, "bitacoraOrdenada.txt");
 }
