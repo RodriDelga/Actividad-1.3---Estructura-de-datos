@@ -4,8 +4,11 @@
 #include <months.hpp>
 #include "OOPUtils.h"
 #include "Registro.h"
+#include "mergeSortByIpKey.hpp"
 #include <binarySearchByDate.hpp>
 #include <mergeSortByDate.hpp>
+#include <string>
+#include <vector>
 
 /*
  * Programa: Ordenamiento y consulta por rango de fechas de una bitácora.
@@ -48,9 +51,16 @@ int main() {
             for(int i = 4; i < partes.size(); i++){
                 mensaje += partes[i] + ((i==partes.size()-1) ? "":" ");
             }
+            std::vector<std::string> ipKeys = OOPUtils::split(partes[3], ".");
+            std::vector<std::string> noPort = OOPUtils::split(ipKeys[3], ":");
+            ipKeys.pop_back();
+            ipKeys.push_back(noPort[0]);
 
             Registro* r = new Registro(months.getMonthAbr(partes[0]), std::stoi(partes[1]), std::stoi(horario[0]), std::stoi(horario[1]), 
-                                       std::stoi(horario[2]), partes[3], mensaje, months);
+                                       std::stoi(horario[2]), partes[3], mensaje, months, ipKeys);
+            
+            
+            
             bitacora.push_back(r);
 
         } 
@@ -61,7 +71,7 @@ int main() {
     }
 
     mergeSortByDate(bitacora, 0, static_cast<int>(bitacora.size()) - 1);
-
+    mergeSortByIpKey(bitacora, 0, static_cast<int>(bitacora.size()) - 1);
     std::string opcString = "";
     int opc = 0;
     std::string startMonthString = "";
