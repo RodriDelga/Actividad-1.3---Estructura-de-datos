@@ -1,5 +1,5 @@
 #pragma once
-#include <Registro.h>
+#include <Registro.hpp>
 
 void merge2(std::vector<Registro *> &array, int first, int middle, int last) {
     int nL = middle - first + 1;
