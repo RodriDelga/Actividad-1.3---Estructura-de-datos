@@ -1,10 +1,10 @@
-#include "ConsoleUI.hpp"
-#include "Registro.hpp"
-#include "mergeSortByIpKey.hpp"
-#include <Date.hpp>
-#include <FileHandler.hpp>
-#include <binarySearchByDate.hpp>
-#include <mergeSortByDate.hpp>
+#include "ConsoleUI.h"
+#include "Registro.h"
+#include "mergeSortByIpKey.h"
+#include "Date.h"
+#include "FileHandler.h"
+#include "binarySearchByDate.h"
+#include "mergeSortByDate.h"
 
 /*
  * Programa: Ordenamiento y consulta por rango de fechas de una bitácora.
@@ -58,7 +58,6 @@ int main() {
 
       switch (opc) {
       case 1:
-        mergeSortByDate(bitacora, 0, bitacora.size() - 1);
         dateStart = ConsoleUI::promptForDate("inicio", months);
 
         dateEnd = ConsoleUI::promptForDate("final", months);
@@ -66,6 +65,7 @@ int main() {
         start = lowerBoundDate(bitacora, dateStart);
 
         end = upperBoundDate(bitacora, dateEnd) - 1;
+        
         if (start > end)
           std::cout << "No hay registros para ese periodo." << std::endl;
         for (int i = start; i <= end; i++) {
@@ -89,7 +89,7 @@ int main() {
       std::cout << "Ingresa un valor valido... FF" << std::endl;
       std::cout << std::endl;
     }
-  } while (opc != 2);
+  } while (opc != 3);
 
   fileHandler.storeLogs(bitacora, "bitacoraOrdenada.txt");
 }

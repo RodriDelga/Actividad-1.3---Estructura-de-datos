@@ -1,5 +1,5 @@
-#include "Registro.hpp"
-#include <months.hpp>
+#include "Registro.h"
+#include "Months.h"
 #include <vector>
 /*
  * Implementación de la clase Registro: constructor, comparación
@@ -66,6 +66,10 @@ std::string Registro::getRegistro() {
      std::to_string(minuto) + ":" +(segundo>= 10 ? "" : "0" ) + std::to_string(segundo) + " " + ip + " " + mensaje;
 }
 
+Date Registro::getFecha() const {
+    return Date(mes, dia, hora, minuto, segundo);
+}
+
 // Retorna: el mes del registro (6-10).
 int Registro::getMes() const { return mes; }
 // Retorna: el día del mes del registro.
@@ -80,4 +84,3 @@ int Registro::getSegundo() const { return segundo; }
 std::string Registro::getIp() { return ip; }
 // Retorna: el mensaje contenido en el registro.
 std::string Registro::getMensaje() { return mensaje; }
-
