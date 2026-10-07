@@ -1,4 +1,5 @@
 #include "Registro.h"
+#include "IpKey.h"
 #include "Months.h"
 #include <vector>
 /*
@@ -16,16 +17,10 @@
 // hora, minuto, segundo: hora del registro, representada como texto.
 // ip: dirección IP asociada al registro. mensaje: contenido del mensaje registrado.
 Registro::Registro(int mes, int dia, int hora, int  minuto, int segundo, std::string ip, std::string mensaje, const MonthRegistry& reg, std::vector<std::string>& ipKeys) 
-: mes(mes), dia(dia), hora(hora), minuto(minuto), segundo(segundo), ip(ip), mensaje(mensaje), monthRegistry_(reg)
-{
-    for (int i = 0; i < 4; i++) {
-        ipKey[i] = std::stoi(ipKeys[i]);
-    }
-}
+: mes(mes), dia(dia), hora(hora), minuto(minuto), segundo(segundo), ip(ip), mensaje(mensaje), monthRegistry_(reg), ipKey(ipKeys)
+{}
 
-int Registro::getIpKey(int i) const {
-    return ipKey[i];
-}
+
 
 // Compara este registro con otro para determinar orden cronológico.
 // registro: el registro con el que se compara.
@@ -36,22 +31,6 @@ bool Registro::operator<(const Registro &registro) const {
     else if(hora != registro.getHora()) return hora < registro.getHora();
     else if(minuto !=(registro.getMinuto())) return minuto < registro.getMinuto();
     else if(segundo < registro.getSegundo()) return true;
-    else return false;
-}
-
-bool Registro::compareIpKeyLT(const Registro &otherRegistro) const  {
-    if(ipKey[0] != otherRegistro.getIpKey(0)) {
-        return ipKey[0] < otherRegistro.getIpKey(0);
-    }
-    else if(ipKey[1] != otherRegistro.getIpKey(1)) {
-        return ipKey[1] < otherRegistro.getIpKey(1);
-    }
-    else if(ipKey[2] != otherRegistro.getIpKey(2)) {
-        return ipKey[2] < otherRegistro.getIpKey(2);
-    }
-    else if(ipKey[3] != otherRegistro.getIpKey(3)) {
-        return ipKey[3] < otherRegistro.getIpKey(3);
-    }
     else return false;
 }
 
@@ -66,7 +45,7 @@ std::string Registro::getRegistro() {
      std::to_string(minuto) + ":" +(segundo>= 10 ? "" : "0" ) + std::to_string(segundo) + " " + ip + " " + mensaje;
 }
 
-Date Registro::getFecha() const {
+Date Registro::getDate() const {
     return Date(mes, dia, hora, minuto, segundo);
 }
 

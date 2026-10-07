@@ -10,6 +10,7 @@
  * Fecha: 3 de septiembre de 2026
  */
 
+#include <array>
 #include <string>
 #include <vector>
 #include <iostream>

@@ -1,11 +1,10 @@
 #include "ConsoleUI.h"
+#include "IpKey.h"
 #include "Registro.h"
-#include "mergeSortByIpKey.h"
 #include "Date.h"
 #include "FileHandler.h"
-#include "binarySearchByDate.h"
-#include "mergeSortByDate.h"
-
+#include <binarySearch.h>
+#include <mergeSort.h>
 /*
  * Programa: Ordenamiento y consulta por rango de fechas de una bitácora.
  * Lee un archivo de bitácora, lo ordena cronológicamente con merge sort,
@@ -33,8 +32,6 @@ int main() {
 
   fileHandler.readLogs(bitacora, "bitacora.txt");
 
-  mergeSortByDate(bitacora, 0, static_cast<int>(bitacora.size()) - 1);
-  mergeSortByIpKey(bitacora, 0, static_cast<int>(bitacora.size()) - 1);
   std::string opcString = "";
   int opc = 0;
 
@@ -43,10 +40,8 @@ int main() {
   std::string endMonthString = "";
   std::string endDayString = "";
 
-  Date dateStart;
-  Date dateEnd;
-  int start,end;
-
+  
+mergeSort(bitacora, 0, static_cast<int>(bitacora.size()) - 1, [](const auto &item) {return item->getDate();});
   do {
     try {
       std::cout << "Selecciona una opción: " << std::endl;
@@ -56,15 +51,22 @@ int main() {
       std::getline(std::cin, opcString);
       opc = std::stoi(opcString);
 
+      Date dateStart, dateEnd;
+      IpKey ipKeyStart, ipKeyEnd;
+      int start,end;
+
       switch (opc) {
       case 1:
+        
+        mergeSort(bitacora, 0, static_cast<int>(bitacora.size()) - 1, [](const auto &item) {return item->getDate();});
+
         dateStart = ConsoleUI::promptForDate("inicio", months);
 
         dateEnd = ConsoleUI::promptForDate("final", months);
 
-        start = lowerBoundDate(bitacora, dateStart);
+        start = lowerBound(bitacora, dateStart, [](const auto &item) {return item->getDate();});
 
-        end = upperBoundDate(bitacora, dateEnd) - 1;
+        end = upperBound(bitacora, dateStart, [](const auto &item) {return item->getDate();})-1;
         
         if (start > end)
           std::cout << "No hay registros para ese periodo." << std::endl;
@@ -74,9 +76,16 @@ int main() {
 
         break;
       case 2:
-        mergeSortByIpKey(bitacora, 0, bitacora.size() - 1);
-        std::cout << "Introduce una clave IP en el formato XXX.X.X.XX"
-                  << std::endl;
+        mergeSort(bitacora, 0, bitacora.size() - 1, [](const auto &item) {return item->getIpKey();});
+        ipKeyStart = ConsoleUI::promptForIpKey("inicio");
+        ipKeyEnd = ConsoleUI::promptForIpKey("final");
+        start = lowerBound(bitacora, ipKeyStart, [](const auto &item) {return item->getIpKey();});
+        end = upperBound(bitacora, ipKeyEnd, [](const auto &item) {return item->getIpKey();}) - 1;
+        if (start > end)
+          std::cout << "No hay registros para ese periodo." << std::endl;
+        for (int i = start; i <= end; i++) {
+          std::cout << bitacora[i]->getRegistro() << std::endl;
+        }
         break;
       case 3:
         std::cout << "Gracias por usar este programa" << std::endl;

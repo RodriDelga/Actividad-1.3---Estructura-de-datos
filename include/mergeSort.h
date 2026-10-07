@@ -6,8 +6,8 @@
 // middle: índice final de la primera sublista.
 // last: índice final de la segunda sublista.
 // Retorna: nada (el vector queda combinado y ordenado in place).
-template<typename T>
-void merge(std::vector<T> &array, int first, int middle, int last) {
+template<typename T, typename Func>
+void merge(std::vector<T> &array, int first, int middle, int last, Func func) {
 	int nL = middle - first + 1;
 	int nR = last - middle;
     std::vector<T> left;
@@ -26,7 +26,7 @@ void merge(std::vector<T> &array, int first, int middle, int last) {
 	int k = first;
 		
 	while (i < nL && j < nR) {
-		if(*left[i] < *right[j]) {
+		if((func(left[i]) <= func(right[j]))) {
 			array[k] = left[i];
 			i++;
 		} else {
@@ -54,12 +54,12 @@ void merge(std::vector<T> &array, int first, int middle, int last) {
 // last: índice final del rango a ordenar.
 // Retorna: nada (el vector queda ordenado in place).
 // Complejidad: O(n log n)
-template<typename T>
-void mergeSortByDate(std::vector<T> &array, int first, int last) {
+template<typename T,typename Func>
+void mergeSort(std::vector<T> &array, int first, int last, Func func) {
 		if(first >= last) return;
 		int middle = (first + last)/2;
-		mergeSortByDate(array, first, middle);
-		mergeSortByDate(array, middle + 1, last);
+		mergeSort(array, first, middle,func);
+		mergeSort(array, middle + 1, last, func);
 		
-		merge(array, first, middle, last);
+		merge(array, first, middle, last, func);
 }
