@@ -33,6 +33,14 @@ struct Date {
         return second < other.second;
     }
 
+     bool operator<=(const Date &other) const {
+        if (month != other.month) return month <= other.month;
+        else if (day != other.day) return day <= other.day;
+        else if (hour != other.hour) return hour <= other.hour;
+        else if (minute != other.minute) return minute <= other.minute;
+        return second <= other.second;
+    }
+
     void getDate() {
         std::cout << month << " " << day << " " << hour << " " << minute << " " << second;
     }

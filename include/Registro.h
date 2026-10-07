@@ -5,6 +5,7 @@
 #include "Date.h"
 #include <string>
 #include <vector>
+#include <IpKey.h>
 
 /*
  * Clase Registro: representa una entrada de la bitácora con fecha, hora,
@@ -27,7 +28,7 @@ private:
   std::string ip;
   std::string mensaje;
   const MonthRegistry &monthRegistry_;
-  std::array<int, 4> ipKey = {};
+  IpKey ipKey;
 
 public:
   explicit Registro(int mes, int dia, int hora, int minuto, int segundo,
@@ -42,7 +43,7 @@ public:
   int getSegundo() const;
   std::string getIp();
   std::string getMensaje();
-  bool compareIpKeyLT(const Registro &otherRegistro) const;
-  int getIpKey(int i) const;
-  Date getFecha() const;
+  //bool compareIpKeyLT(const Registro &otherRegistro) const;
+  IpKey getIpKey() const {return ipKey;};
+  Date getDate() const;
 };

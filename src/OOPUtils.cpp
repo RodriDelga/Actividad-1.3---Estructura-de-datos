@@ -13,22 +13,24 @@
 // Divide una cadena en subcadenas usando un delimitador dado.
 // source: la cadena a dividir.
 // delimiter: la secuencia de caracteres que separa cada subcadena.
-// Retorna: un vector con las subcadenas resultantes, en el orden en que aparecen.
-std::vector<std::string> OOPUtils::split(const std::string& source, const std::string& delimiter) {
-	std::vector<std::string> result;
+// Retorna: un vector con las subcadenas resultantes, en el orden en que
+// aparecen.
+std::vector<std::string> OOPUtils::split(const std::string &source,
+                                         const std::string &delimiter) {
+  std::vector<std::string> result;
 
-	int start = 0;
-	int end;
+  int start = 0;
+  int end;
 
-	end = source.find(delimiter);
+  end = source.find(delimiter);
 
-	while (end != std::string::npos) {
-		std::string part = source.substr(start, end - start);
-		result.push_back(part);
-		start = end + delimiter.length();
-		end = source.find(delimiter, start);
-	}
-	
-	result.push_back(source.substr(start));
-	return result;
+  while (end != std::string::npos) {
+    std::string part = source.substr(start, end - start);
+    result.push_back(part);
+    start = end + delimiter.length();
+    end = source.find(delimiter, start);
+  }
+
+  result.push_back(source.substr(start));
+  return result;
 }

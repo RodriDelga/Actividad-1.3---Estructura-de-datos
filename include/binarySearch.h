@@ -7,15 +7,16 @@
 // dateStart: la fecha de referencia a comparar.
 // Retorna: el indice del primer elemento con fecha >= dateStart.
 // Complejidad: O(log n)
-template<typename T>
-int lowerBoundDate(const std::vector<T> &array, const Date &dateStart) {
+
+template <typename T, typename V, typename Func>
+int lowerBound(const std::vector<T> &array, const V &target, Func func) {
     int low = 0;
     int high = static_cast<int>(array.size());
 
     while (low < high) {
         int middle = low + (high - low) / 2;
 
-        if (array[middle]->getFecha() < dateStart) {
+        if (func(array[middle]) < target) {
             low = middle + 1;
         } else {
             high = middle;
@@ -30,15 +31,15 @@ int lowerBoundDate(const std::vector<T> &array, const Date &dateStart) {
 // dateEnd: la fecha de referencia a comparar.
 // Retorna: el indice del primer elemento con fecha > dateEnd.
 // Complejidad: O(log n)
-template<typename T>
-int upperBoundDate(const std::vector<T> &array, const Date &dateEnd) {
+template <typename T, typename V, typename Func>
+int upperBound(const std::vector<T> &array, const V &target, Func func) {
     int low = 0;
     int high = static_cast<int>(array.size());
 
     while (low < high) {
         int middle = low + (high - low) / 2;
 
-        if (!(dateEnd < array[middle]->getFecha())) {
+        if (!(target < func(array[middle]))) {
             low = middle + 1;
         } else {
             high = middle;
